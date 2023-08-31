@@ -14,6 +14,9 @@ const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
+const { Database } = require("quickmongo");
+const db = new Database(process.env.mongoKey);
+
 const {
 	Client,
 	GatewayIntentBits,
@@ -48,15 +51,28 @@ for (const file of eventFiles) {
 	}
 }
 const commandFiles = fs
-	.readdirSync('./commands')
+	.readdirSync('./commands/global')
 	.filter(file => file.endsWith('.js'));
+
+const commandFilesTwo = fs
+  .readdirSync('./commands/testing')
+	.filter(file => file.endsWith('.js'));
+
 const commands = [];
+const commandsTwo = [];
 
 client.commands = new Collection();
 client.cooldowns = new Collection();
+
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+	const command = require(`./commands/global/${file}`);
 	commands.push(command.data.toJSON());
+	client.commands.set(command.data.name, command);
+}
+
+for (const file of commandFilesTwo) {
+	const command = require(`./commands/testing/${file}`);
+	commandsTwo.push(command.data.toJSON());
 	client.commands.set(command.data.name, command);
 }
 
@@ -69,6 +85,10 @@ process.on('uncaughtException', (err) => {
 process.on('uncaughtExceptionMonitor', (err, origin) => {
   console.log('Uncaught Exception Monitor: ', err, origin);
 })
+
+db.on("ready", () => {
+    console.log("Connected to the database");
+});
 
 client.login(process.env.TOKEN);
 
