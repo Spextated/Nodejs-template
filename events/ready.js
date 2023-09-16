@@ -1,8 +1,7 @@
-const { Events } = require('discord.js');
 
 const Discord = require("discord.js");
 
-const { GatewayIntentBits, EmbedBuilder, Collection, ActivityType, WebhookClient }
+const { GatewayIntentBits, EmbedBuilder, Collection, ActivityType, WebhookClient, Events }
 = require('discord.js')
 
 const client = new Discord.Client({ intents: [GatewayIntentBits.Guilds] });
@@ -41,6 +40,8 @@ for (const file of commandFilesTwo) {
 	client.commands.set(command.data.name, command);
 }
 
+const webhookClient = new WebhookClient({ id: process.env.webhookID1, token: process.env.webhookToken1 });
+
 module.exports = {
    name: Events.ClientReady,
   once: true, 
@@ -65,8 +66,22 @@ const guild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
       await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.TEST_GUILD_ID),
 			{ body: commandsTwo },
 		);
+      
+let embed = new EmbedBuilder()
+  .setTitle(`${client.user.tag} is now online`)
+  .setDescription(`• Successfully registered **${commands.length}** application commands globally\n• Successfully registered **${commandsTwo.length}** application commands for testing`)
+  .setColor('White')
+  .setTimestamp();
+      
 				console.log(`Successfully registered ${commands.length} application commands globally`);
       console.log(`Successfully registered ${commandsTwo.length} application commands for testing`);
+
+await webhookClient.send({
+	content: '',
+	username: 'Equinox',
+	avatarURL: 'https://i.imgur.com/or0Oxrv.jpg',
+	embeds: [embed],
+}).catch(error => console.log(error));
       
 		} catch (error) {
 			if (error) console.error(error);

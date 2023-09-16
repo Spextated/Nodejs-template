@@ -4,22 +4,22 @@ const db = new Database(process.env.mongoKey);
 
 module.exports = {
   data: new SlashCommandBuilder()
-  .setName('daily')
-  .setDescription('Claim your daily reward every 24 hours'), cooldown: 0, async execute(interaction) {
+  .setName('weekly')
+  .setDescription('Claim your weekly reward every week'), cooldown: 0, async execute(interaction) {
     await interaction.deferReply();
     try {
     await db.connect();
-  let daily = await db.get(`${interaction.user.id}.daily`);
+  let weekly = await db.get(`${interaction.user.id}.weekly`);
   let balance = await db.get(`${interaction.user.id}.balance`);
-   let coins = Math.floor(Math.random() * 15000) + 10000;
+   let coins = Math.floor(Math.random() * 75000) + 10000;
     
   let rewardEmbed = new EmbedBuilder()
-      .setTitle(`:white_check_mark: You have claimed your daily reward of ${coins.toLocaleString()} coins`)
+      .setTitle(`:white_check_mark: You have claimed your weekly reward of ${coins.toLocaleString()} coins`)
       .setColor('White');
       
-    if (!daily) {
-    await db.set(`${interaction.user.id}.daily.time`, Date.now());
-      await db.set(`${interaction.user.id}.daily.claimed`, 1);
+    if (!weekly) {
+    await db.set(`${interaction.user.id}.weekly.time`, Date.now());
+      await db.set(`${interaction.user.id}.weekly.claimed`, 1);
     if (balance) {
     await db.add(`${interaction.user.id}.balance.coins`, coins)
     await db.close();
@@ -31,23 +31,23 @@ module.exports = {
     }
   }
       
-  if (Date.now() >= Number(daily.time) + 86400000) {
+  if (Date.now() >= Number(weekly.time) + 604800000) {
     await db.add(`${interaction.user.id}.balance.coins`, coins)
-    await db.set(`${interaction.user.id}.daily.time`, Date.now());
-    await db.add(`${interaction.user.id}.daily.claimed`, 1);
+    await db.set(`${interaction.user.id}.weekly.time`, Date.now());
+    await db.add(`${interaction.user.id}.weekly.claimed`, 1);
       await db.close();
     return await interaction.editReply({ embeds: [rewardEmbed] });
   } else {
-    let timeRemain = parseInt((Number(daily.time) + 86400000) / 1000);
+    let timeRemain = parseInt((Number(weekly.time) + 604800000) / 1000);
     let timeEmbed = new EmbedBuilder()
-      .setTitle(`:x: You can claim your next daily reward <t:${timeRemain}:R>`)
+      .setTitle(`:x: You can claim your next weekly reward <t:${timeRemain}:R>`)
       .setColor('Red');
       await db.close();
     return await interaction.editReply({ embeds: [timeEmbed] });
   }
     } catch (error) {
-      console.log('There was an error with the daily command: ' + error);
-      return await interaction.editReply({ content: `There was an error with the daily command. Please try again later!`, ephemeral: true });
+      console.log('There was an error with the weekly command: ' + error);
+      return await interaction.editReply({ content: `There was an error with the weekly command. Please try again later!`, ephemeral: true });
     }
   },
 }

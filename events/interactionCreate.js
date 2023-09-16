@@ -70,10 +70,18 @@ if (command.developer) {
       return interaction.reply({ content: `:x: Only Bot Developers are allowed to use this command`, ephemeral: true });
     }
 }
-
+if (command.level) {
+  if (userData.rank.level < command.level) {
+  let embed = new EmbedBuilder()
+  .setTitle(`:x: You need to be level **${command.level}** to use this command`)
+  return interaction.reply({ embeds: [embed] })
+ }
+}
+    
 if (interaction.commandName != "bot-info" || interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe") {
   if (!userData) {
-  await dbTwo.set(`${interaction.user.id}.rank`,{ level: 1, xp: 0 })
+  await dbTwo.set(`${interaction.user.id}.rank`,{ level: 1, xp: 0 });
+    await dbTwo.set(`${interaction.user.id}.balance`, { coins: 0, diamonds: 0 });
   } else {
     
   let xp = Math.floor(Math.random() * 20) + 5;
