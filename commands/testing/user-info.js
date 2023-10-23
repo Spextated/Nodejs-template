@@ -5,7 +5,7 @@ module.exports = {
         .setName('user-info')
         .setDescription('Get information about a member in the guild').addUserOption(option => option.setName('member').setDescription('Select a member').setRequired(false)), cooldown: 10, 
     async execute(interaction) {
-try {
+      await interaction.deferReply();
    let user = interaction.options.getUser('member') || interaction.user;
 const member = await interaction.guild.members.fetch(user.id);
 const userAvatar = user.displayAvatarURL({ extension: 'png' });
@@ -44,10 +44,6 @@ let embed = new EmbedBuilder()
   .setFooter({ text: `User ID: ${member.id}`, iconURL: userAvatar })
   .setTimestamp();
 
-  await interaction.reply({ embeds: [embed] });
-} catch (error) {
-  console.log('There was an error with the user-info command: ' + error)
-  await interaction.reply({ content: `There was an error with the user-info command. Please try again later!`, ephemeral: true })
-}
+  return await interaction.editReply({ embeds: [embed] });
   },
 }

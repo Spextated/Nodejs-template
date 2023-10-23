@@ -12,18 +12,17 @@ module.exports = {
       let userInfo = await db.get(`${interaction.user.id}`);
     
     if (subcommand === 'open') {
-    try {
       if (userInfo.bank) {
         let openedBank = new EmbedBuilder()
   .setTitle(`:x: You already have a bank account open`)
-  .setColor('Red');
+  .setColor('#000000');
    await db.close();
   return interaction.editReply({ embeds: [openedBank]});
       }
 if (userInfo.balance.coins < 150000) {
   let failBank = new EmbedBuilder()
   .setTitle(`:x: You need **${150000 - Number(userInfo.balance.coins)}** more coins to open a bank account`)
-  .setColor('Red');
+  .setColor('#000000');
    await db.close();
   return interaction.editReply({ embeds: [failBank]});
 } else {
@@ -35,17 +34,11 @@ if (userInfo.balance.coins < 150000) {
      await db.close();
       return interaction.editReply({ embeds: [success] });
 }
-      
-    } catch (error) {
-      console.log('There was an error with the bank open command: ' + error)
-      return interaction.editReply({ content: `There was an error with the bank open command. Please try again later!`, ephemeral: true });
-    }
   } else if (subcommand === 'close') {
-      try {
 if (userInfo.bank === undefined) {
   let failBank = new EmbedBuilder()
   .setTitle(`:x: You don't have an opened bank account to close`)
-  .setColor('Red');
+  .setColor('#000000');
    await db.close();
   return interaction.editReply({ embeds: [failBank]});
 } else {
@@ -57,19 +50,13 @@ if (userInfo.bank === undefined) {
      await db.close();
       return interaction.editReply({ embeds: [success] });
 }
-      
-    } catch (error) {
-      console.log('There was an error with the bank close command: ' + error)
-      return interaction.editReply({ content: `There was an error with the bank close command. Please try again later!`, ephemeral: true });
-    }
   } else if (subcommand === 'deposit') {
       let amount = interaction.options.getInteger('amount');
-      try {
     if (userInfo.bank) {
       if (amount > userInfo.balance.coins) {
         let failCoin = new EmbedBuilder()
         .setTitle(':x: You do not have that amount of coins to deposit into your bank account')
-        .setColor('Red');
+        .setColor('#000000');
         await db.close();
         return interaction.editReply({ embeds: [failCoin] });
       }
@@ -83,22 +70,17 @@ if (userInfo.bank === undefined) {
         } else {
           let fail = new EmbedBuilder()
           .setTitle(':x: You do not have an opened bank account to deposit coins into')
-          .setColor('Red');
+          .setColor('#000000');
           await db.close();
           return interaction.editReply({ embeds: [fail] })
         }
-      } catch (error) {
-        console.log('There was an error with the bank deposit command: ' + error)
-      return interaction.editReply({ content: `There was an error with the bank deposit command. Please try again later!`, ephemeral: true });
-      }
  } else if (subcommand === 'withdraw') {
       let amount = interaction.options.getInteger('amount');
-      try {
         if (userInfo.bank) {
       if (amount > userInfo.bank.coins) {
         let failCoin = new EmbedBuilder()
         .setTitle(':x: Your bank account balance is lower than the amount you are trying to withdraw from the account')
-        .setColor('Red');
+        .setColor('#000000');
         await db.close();
         return await interaction.editReply({ embeds: [failCoin] });
       }
@@ -112,14 +94,10 @@ if (userInfo.bank === undefined) {
         } else {
           let fail = new EmbedBuilder()
           .setTitle(':x: You do not have an opened bank account to withdraw coins from')
-          .setColor('Red');
+          .setColor('#000000');
           await db.close()
           return await interaction.editReply({ embeds: [fail] })
         }
-      } catch (error) {
-        console.log('There was an error with the bank withdraw command: ' + error)
-      return interaction.editReply({ content: `There was an error with the bank withdraw. Please try again later!`, ephemeral: true });
-      }
   }
   },
 } 

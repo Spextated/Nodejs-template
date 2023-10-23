@@ -5,7 +5,7 @@ module.exports = {
         .setName('bot-info')
         .setDescription('Information about Equinox'), cooldown: 10, 
     async execute(interaction) {
-try {
+
         //Ping
         const startTime = Date.now();
         const reply = await interaction.reply('Calculating Equinox\'s ping...');
@@ -30,12 +30,7 @@ try {
       { name: 'CPU Usage', value: `> ${cpuUsage.toFixed(2)}%`, inline: true })
 .setThumbnail(interaction.client.user.avatarURL({ extension: 'png' }));
 
-  await reply.edit({ content: '', embeds: [embed] });
-} catch (error) {
-  console.log('There was an error with the bot-info command: ' + error)
-  await reply.edit({ content: `There was an error with the bot-info command. Please try again later!`, ephemeral: true })
-}
-      
+  await reply.edit({ content: '', embeds: [embed] });     
     },
 }
 

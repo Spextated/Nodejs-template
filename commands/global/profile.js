@@ -7,7 +7,7 @@ module.exports = {
   .setName('profile')
   .setDescription('Check out your profile'), cooldown: 0, async execute(interaction) {
     await interaction.deferReply();
-    try {
+  
     await db.connect();
       
       let userInfo = await db.get(`${interaction.user.id}`);
@@ -36,12 +36,10 @@ module.exports = {
           let maxXP = Number(userInfo.rank.level) * 100;
         balEmbed.addFields({ name: 'Rank', value: `> Level ${userInfo.rank.level || 1} (${userInfo.rank.xp || 0}/${maxXP} XP)`, inline: true })
         }
-      
+      if (userInfo.work) {
+        balEmbed.addFields({ name: 'Shifts Completed', value: `> ${userInfo.work.shifts || 0}`, inline: true })
+      }
        await db.close();
       return await interaction.editReply({ embeds: [balEmbed] });
-    } catch (error) {
-      console.log('There was an error with the profile command: ' + error)
-      return await interaction.editReply({ content: `There was an error with the profile command. Please try again later!`, ephemeral: true });
-    }
   },
 } 

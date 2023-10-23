@@ -10,19 +10,15 @@ module.exports = {
         .setRequired(true)), cooldown: 0, developer: true,
   async execute(interaction) {
     const guildId = interaction.options.getString('guild-id')
-
+await interaction.deferReply();
     let guild = interaction.client.guilds.cache.get(guildId);
 
     if (!guild) {
-      return interaction.reply({ content: ':x: Unable to find a guild with that ID', ephemeral: true })
+      return await interaction.editReply({ content: ':x: Unable to find a guild with that ID', ephemeral: true })
     }
 
-   guild.leave(guildId).then(guild => {
-      interaction.reply({ content: `I've left **${guild.name}** (${guildId})`, ephemeral: true })
-    }).catch(async error => {
-      console.log(`There was an error with the leave command: ` + error);
-      await interaction.reply({ content: `There was an error with the leave command: ${error.message}`, ephemeral: true })
+   guild.leave(guildId).then(async guild => {
+      return await interaction.editReply({ content: `I've left **${guild.name}** (${guildId})`, ephemeral: true })
     })
-
   },
 }

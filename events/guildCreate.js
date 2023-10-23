@@ -16,7 +16,7 @@ const embed = new EmbedBuilder()
   .addFields({ name: 'Guild Owner', value: `${owner.user.tag}`, inline: true }, { name: 'Guild Owner ID', value: `${guild.ownerId}`, inline: true }, { name: 'Guild Member Count', value: `${guild.memberCount}`, inline: true }, { name: 'Joined At', value: `<t:${parseInt(guild.joinedAt / 1000)}>`, inline: true })
   .setThumbnail(`${guild.iconURL()}`)
   .setFooter({ text: `Currently in ${guild.client.guilds.cache.size} server(s)`})
-  .setColor('#ADD8E6')
+  .setColor('#2F3136')
   .setTimestamp();
 
 await webhookClient.send({

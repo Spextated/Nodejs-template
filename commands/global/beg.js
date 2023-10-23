@@ -8,8 +8,7 @@ module.exports = {
   .setDescription('Have a chance of getting an reward by begging'), cooldown: 45, async execute(interaction) {
     await db.connect();
     await interaction.deferReply();
-    try {
-      let coins = Math.floor(Math.random() * 1500) + 1000;
+      let coins = Math.floor(Math.random() * 750) + 750;
       let chance = Math.floor(Math.random() * 100) + 1;
       if (chance > 25) {
         let winEmbed = new EmbedBuilder()
@@ -20,14 +19,11 @@ await db.add(`${interaction.user.id}.balance.coins`, coins);
         return await interaction.editReply({ embeds: [winEmbed] });
       } else {
         let loseEmbed = new EmbedBuilder()
-        .setTitle(`:cry: Your begging didn't work and you recieved no coins`)
+        .setTitle(`:cry: Your begging didn't work and you lost **${coins.toLocaleString()}** coins`)
         .setColor('#000000');
+        await db.subtract(`${interaction.user.id}.balance.coins`, coins);
           await db.close();
         return await interaction.editReply({ embeds: [loseEmbed] });
       }
-    } catch (error) {
-      console.log(`There was an error with the beg command: ${error}`);
-      return await interaction.editReply({ content: `There was an error with the beg command. Please try again later!`})
-    }
   }, 
 }

@@ -1,14 +1,19 @@
-const { EmbedBuilder, Events, Collection }
+const { EmbedBuilder, Events, Collection, WebhookClient }
 = require('discord.js')
 const { QuickDB } = require("quick.db");
 const db = new QuickDB({ filePath: "../json.sqlite" });
 const { Database } = require('quickmongo')
 const dbTwo = new Database(process.env.mongoKey);
+const ms = require('enhanced-ms');
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
-  
+
+const webhookClient = new WebhookClient({ id: process.env.webhookID2, token: process.env.webhookToken2 });
+
+const webhookClient2 = new WebhookClient({ id: process.env.webhookID3, token: process.env.webhookToken3 });
+    
 let maintenance = await db.get('maintenance') || false;
 let banned_user = await db.get('blacklisted-users') || [];
 let banned_server = await db.get('blacklisted-guilds') || [];
@@ -52,10 +57,10 @@ if (!command) {
 	if (timestamps.has(interaction.user.id)) {
 		const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
     
-	const timeLeft = (expirationTime - now) / 1000;
+	const timeLeft = (expirationTime - now);
 		const embed = new EmbedBuilder()
-			.setTitle(`:x: Please wait ${timeLeft.toFixed(0)} more second(s) before using the **${command.data.name}** command again!`)
-			.setColor('#ffff00');
+			.setTitle(`:x: Please wait **${ms(timeLeft)}** before using the **${command.data.name}** command again!`)
+			.setColor('#2F3136');
 
 		if (now < expirationTime) {
 			return interaction.reply({ embeds: [embed], ephemeral: true });
@@ -67,21 +72,41 @@ if (!command) {
 
 if (command.developer) {
   if (interaction.user.id !== '415178463138545664') {
-      return interaction.reply({ content: `:x: Only Bot Developers are allowed to use this command`, ephemeral: true });
+      return await interaction.editReply({ content: `:x: Only Bot Developers are allowed to use this command`, ephemeral: true });
     }
 }
 if (command.level) {
   if (userData.rank.level < command.level) {
   let embed = new EmbedBuilder()
   .setTitle(`:x: You need to be level **${command.level}** to use this command`)
-  return interaction.reply({ embeds: [embed] })
+  return await interaction.editReply({ embeds: [embed] })
  }
 }
     
-if (interaction.commandName != "bot-info" || interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe") {
+if (interaction.commandName != "bot-info" || interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe" || interaction.commandName != "data-edit" || interaction.commandName != "data-info") {
   if (!userData) {
   await dbTwo.set(`${interaction.user.id}.rank`,{ level: 1, xp: 0 });
     await dbTwo.set(`${interaction.user.id}.balance`, { coins: 0, diamonds: 0 });
+    await dbTwo.set(`${interaction.user.id}.items`, []);
+    
+let embed = new EmbedBuilder()
+.setTitle('New Player Data')
+.addFields({ name: 'Player Tag', value: interaction.user.tag, inline: false })
+.addFields({ name: 'Player ID', value: interaction.user.id, inline: false })
+.addFields({ name: 'Guild ID', value: interaction.guild.id, inline: false })
+.addFields({ name: 'Data Creation Date', value: `<t:${parseInt(Date.now() / 1000)}:F>`, inline: false })
+.addFields({ name: 'Data', value: `\`${JSON.stringify(await dbTwo.get(interaction.user.id))}\``, inline: false })
+  .setColor('#2F3136')
+  .setFooter({ text: `${await dbTwo.count()} Total Players` })
+    .setTimestamp();
+    
+  await webhookClient2.send({
+	content: '',
+	username: 'Equinox',
+	avatarURL: 'https://i.imgur.com/or0Oxrv.jpg',
+	embeds: [embed],
+}).catch(error => console.log(error));
+    
   } else {
     
   let xp = Math.floor(Math.random() * 20) + 5;
@@ -100,8 +125,19 @@ if (interaction.commandName != "bot-info" || interaction.commandName != "server-
 	try {
 		await command.execute(interaction);
 	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+let embed = new EmbedBuilder()
+    .setTitle(`:x: There was an error with the ${interaction.commandName} command`)   .setDescription(`\`${error.stack}\``)
+  .setColor('#2F3136')
+    .setTimestamp();
+    
+  await webhookClient.send({
+	content: '',
+	username: 'Equinox',
+	avatarURL: 'https://i.imgur.com/or0Oxrv.jpg',
+	embeds: [embed],
+}).catch(error => console.log(error));
+
+    return await interaction.editReply({ content: `:x: There was an error with the ${interaction.commandName} command. Please try again later!`, ephemeral: true });
 	}
  },
 }

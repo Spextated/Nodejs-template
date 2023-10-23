@@ -9,10 +9,10 @@ module.exports = {
   .addStringOption(option => option.setName('choice').setDescription('Pick between Rock, Paper, or Scissors').addChoices({ name: 'Rock', value: 'rock' }, { name: 'Paper', value: 'paper' }, { name: 'Scissors', value: 'scissors' }).setRequired(true)), cooldown: 30, async execute(interaction) {
     const choice = interaction.options.getString('choice');
     await interaction.deferReply();
-    try {
+    
       await db.connect();
       
-    let coins = Math.floor(Math.random() * 1250) + 750;
+    let coins = Math.floor(Math.random() * 500) + 1500;
     const responses = ['scissors', 'rock', 'paper'];
       const computer = responses[Math.floor(Math.random() * responses.length)];
       
@@ -20,7 +20,7 @@ module.exports = {
     .setTitle(`:partying_face: You chose ${choice} and I chose ${computer}. You won ${coins.toLocaleString()} coins!`)
     .setColor('White');
     let drawEmbed = new EmbedBuilder()
-      .setTitle(`:heavy_equals_sign: You chose ${choice} and I chose ${computer}. We drew!`)
+      .setTitle(`:heavy_equals_sign: You chose ${choice} and I chose ${computer}. We drew, so you didn't lose any coins!`)
       .setColor('White');
   if (choice === computer) {
     await db.close();
@@ -31,14 +31,11 @@ module.exports = {
     return await interaction.editReply({ embeds: [winEmbed] });
     } else {
     let loseEmbed = new EmbedBuilder()
-    .setTitle(`:cry: You chose ${choice} and I chose ${computer}. You lost, better luck next time!`)
+    .setTitle(`:cry: You chose ${choice} and I chose ${computer}. You lost ${coins.toLocaleString()} coins. Better luck next time!`)
     .setColor('#000000');
+    await db.subtract(`${interaction.user.id}.balance.coins`, coins);
       await db.close();
     return await interaction.editReply({ embeds: [loseEmbed] });
-    }
-    } catch (error) {
-      console.log(`There was an error with the rps command: ${error}`);
-      return await interaction.editReply({ content: 'There was an error with the rps command. Please try again later!', ephemeral: true })
     }
   },
 }

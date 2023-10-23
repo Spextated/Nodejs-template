@@ -7,14 +7,14 @@ module.exports = {
   .setName('daily')
   .setDescription('Claim your daily reward every 24 hours'), cooldown: 0, async execute(interaction) {
     await interaction.deferReply();
-    try {
+
     await db.connect();
   let daily = await db.get(`${interaction.user.id}.daily`);
   let balance = await db.get(`${interaction.user.id}.balance`);
-   let coins = Math.floor(Math.random() * 15000) + 10000;
+   let coins = Math.floor(Math.random() * 2500) + 15000;
     
   let rewardEmbed = new EmbedBuilder()
-      .setTitle(`:white_check_mark: You have claimed your daily reward of ${coins.toLocaleString()} coins`)
+      .setTitle(`🎁 You have claimed your daily reward of ${coins.toLocaleString()} coins`)
       .setColor('White');
       
     if (!daily) {
@@ -41,13 +41,9 @@ module.exports = {
     let timeRemain = parseInt((Number(daily.time) + 86400000) / 1000);
     let timeEmbed = new EmbedBuilder()
       .setTitle(`:x: You can claim your next daily reward <t:${timeRemain}:R>`)
-      .setColor('Red');
+      .setColor('#000000');
       await db.close();
     return await interaction.editReply({ embeds: [timeEmbed] });
   }
-    } catch (error) {
-      console.log('There was an error with the daily command: ' + error);
-      return await interaction.editReply({ content: `There was an error with the daily command. Please try again later!`, ephemeral: true });
-    }
   },
 }

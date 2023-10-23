@@ -8,18 +8,19 @@ module.exports = {
    .setDescription('Blacklist users & servers from using Equinox')
    .addSubcommand(subcommand => subcommand.setName('user').setDescription('Blacklist a user from using Equinox (Bot Developer Only)').addStringOption(option => option.setName('user-id').setDescription('Provide the user-id you want to blacklist from using Equinox').setRequired(true)).addStringOption(option => option.setName('reason').setDescription('Provide why the user was blacklisted').setRequired(false))).addSubcommand(subcommand => subcommand.setName('guild').setDescription('Blacklist a guild from using Equinox (Bot Developer Only)').addStringOption(option => option.setName('guild-id').setDescription('Provide the guild-id you want to blacklist from using Equinox').setRequired(true)).addStringOption(option => option.setName('reason').setDescription('Provide why the guild was blacklisted').setRequired(false))).addSubcommand(subcommand => subcommand.setName('list').setDescription('Lists all the users & guilds that are blacklisted (Bot Developer Only)')), cooldown: 0, developer: true, async execute(interaction) {
      let subcommand = interaction.options.getSubcommand();
+     await interaction.deferReply();
      let date = new Date(Date.now())
 if (subcommand === 'user') {
-try {
+
   let id = interaction.options.getString('user-id');
   let reason = interaction.options.getString('reason') || 'No reason was provided';
   let banned_users = await db.get('blacklisted-users') || [];
   let user = interaction.client.users.cache.get(id);
   if (!user) {
-    return interaction.reply({ content: ':x: Unable to find a user with that ID', ephemeral: true })
+    return await interaction.editReply({ content: ':x: Unable to find a user with that ID', ephemeral: true })
   }
   if (banned_users.includes(id)) {
-    return interaction.reply({ content: ':x: The user provided is already blacklisted', ephemeral: true })
+    return await interaction.editReply({ content: ':x: The user provided is already blacklisted', ephemeral: true })
   }
   await db.push('blacklisted-users', id)
   await axios.post(process.env.SheetsAPI_Users, {
@@ -30,22 +31,19 @@ try {
         Date: date.toString()
       }
   })
-  await interaction.reply({ content: `${user.username} (${user.id}) has been blacklisted from using Equinox`, ephemeral: true });
-  } catch (error) {
-    console.log('There was an error with the blacklist user command: ' + error.message)
-    await interaction.reply({ content: `There was an error with the blacklist user command: ${error.message}`, ephemeral: true });
-  }
+  return await interaction.editReply({ content: `${user.username} (${user.id}) has been blacklisted from using Equinox`, ephemeral: true });
+
 } else if (subcommand === 'guild') {
-  try {
+  
     let guildId = interaction.options.getString('guild-id');
     let reason = interaction.options.getString('reason') || 'No reason was provided';
     let banned_guilds = await db.get('blacklisted-guilds') || [];
     let guild = interaction.client.guilds.cache.get(guildId);
     if (!guild) {
-      return interaction.reply({ content: ':x: Unable to find a guild with that ID', ephemeral: true })
+      return await interaction.editReply({ content: ':x: Unable to find a guild with that ID', ephemeral: true })
     }
 if (banned_guilds.includes(guildId)) {
-    return interaction.reply({ content: ':x: The guild provided is already blacklisted', ephemeral: true })
+    return await interaction.editReply({ content: ':x: The guild provided is already blacklisted', ephemeral: true })
   }
   await db.push('blacklisted-guilds', guildId)
 await axios.post(process.env.SheetsAPI_Guilds, {
@@ -56,13 +54,10 @@ await axios.post(process.env.SheetsAPI_Guilds, {
         Date: date.toString()
       }
     })
-    await interaction.reply({ content: `${guild.name} (${guild.id}) has been blacklisted from using Equinox`, ephemeral: true })
-  } catch (error) {
-    console.log('There was an error with the blacklist server command: ' + error.message)
-    await interaction.reply({ content: `There was an error with the blacklist server command: ${error.message}`, ephemeral: true });
-  }
+    return await interaction.editReply({ content: `${guild.name} (${guild.id}) has been blacklisted from using Equinox`, ephemeral: true })
+
 } else if (subcommand === 'list') {
-  try {
+
     let banned_users = await axios.get(process.env.SheetsAPI_Users)
     let banned_guilds = await axios.get(process.env.SheetsAPI_Guilds)
     let arr1 = [];
@@ -82,11 +77,8 @@ await axios.post(process.env.SheetsAPI_Guilds, {
     .addFields({ name: 'Users', value: `${finalArr1 || 'No users to display'}`, inline: false })
     .addFields({ name: 'Guilds', value: `${finalArr2 || 'No guilds to display'}`, inline: false })
     .setTimestamp();
-    await interaction.reply({ embeds: [embed], ephemeral: true });
-  } catch (error) {
-    console.log('There was an error with the blacklist list command: ' + error)
-    await interaction.reply({ content: `There was an error with the blacklist list command: ${error.message}`, ephemeral: true });
-  }
+    return await interaction.editReply({ embeds: [embed], ephemeral: true });
+
 }
      
   },

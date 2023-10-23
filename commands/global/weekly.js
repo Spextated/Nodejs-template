@@ -7,14 +7,14 @@ module.exports = {
   .setName('weekly')
   .setDescription('Claim your weekly reward every week'), cooldown: 0, async execute(interaction) {
     await interaction.deferReply();
-    try {
+    
     await db.connect();
   let weekly = await db.get(`${interaction.user.id}.weekly`);
   let balance = await db.get(`${interaction.user.id}.balance`);
-   let coins = Math.floor(Math.random() * 75000) + 10000;
+   let coins = Math.floor(Math.random() * 7500) + 50000;
     
   let rewardEmbed = new EmbedBuilder()
-      .setTitle(`:white_check_mark: You have claimed your weekly reward of ${coins.toLocaleString()} coins`)
+      .setTitle(`🎁 You have claimed your weekly reward of ${coins.toLocaleString()} coins`)
       .setColor('White');
       
     if (!weekly) {
@@ -41,13 +41,9 @@ module.exports = {
     let timeRemain = parseInt((Number(weekly.time) + 604800000) / 1000);
     let timeEmbed = new EmbedBuilder()
       .setTitle(`:x: You can claim your next weekly reward <t:${timeRemain}:R>`)
-      .setColor('Red');
+      .setColor('#000000');
       await db.close();
     return await interaction.editReply({ embeds: [timeEmbed] });
   }
-    } catch (error) {
-      console.log('There was an error with the weekly command: ' + error);
-      return await interaction.editReply({ content: `There was an error with the weekly command. Please try again later!`, ephemeral: true });
-    }
   },
 }

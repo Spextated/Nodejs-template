@@ -5,8 +5,7 @@ module.exports = {
         .setName('server-info')
         .setDescription('Information about this server'), cooldown: 10, 
     async execute(interaction) {
-try {
-
+await interaction.deferReply();
 let link;
 
 if (interaction.guild.vanityURLCode) {
@@ -31,12 +30,7 @@ if (interaction.guild.vanityURLCode) {
 .setFooter({ text: `Server ID: ${interaction.guild.id}`})
 .setTimestamp();
 
-await interaction.reply({ embeds: [embed] })
-
-} catch (error) {
-  console.log(`There was an error with the server-info command: ` + error)
-  await interaction.reply({ content: `There was an error with the server-info command. Please try again later!`, ephemeral: true })
-}
+return await interaction.editReply({ embeds: [embed] })
   
   },
 }

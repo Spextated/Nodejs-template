@@ -13,9 +13,9 @@ module.exports = {
     let target = interaction.options.getUser('user');
     let targetBalance = await db.get(`${target.id}.balance`);
 
-let amount = Math.floor(Math.random() * 7500) + 1;
+let amount = parseInt(0.05 * targetBalance);
 let chance = Math.floor(Math.random() * 4) + 1;
-try {
+
   if (!interaction.guild.members.cache.get(target.id)) {
       let embed = new EmbedBuilder()
       .setTitle(':x: The user must be a member of this server')
@@ -25,14 +25,14 @@ try {
     }
     if (target.id === interaction.user.id) {
       let embed = new EmbedBuilder()
-      .setTitle(':x: You are unable to rob yourself')
+      .setTitle(':x: You are not allowed to rob yourself')
       .setColor('#000000');
       await db.close();
       return await interaction.editReply({ embeds: [embed] })
     }
   if (target.bot) {
     let embed = new EmbedBuilder()
-      .setTitle(':x: You are unable to rob a bot')
+      .setTitle(':x: You are allowed to rob a bot')
       .setColor('#000000');
     await db.close();
       return await interaction.editReply({ embeds: [embed]})
@@ -44,22 +44,25 @@ try {
     await db.close();
       return await interaction.editReply({ embeds: [embed]})
   }
-  if (targetBalance.coins < 75000) {
+  if (targetBalance.coins === 0) {
     let embed = new EmbedBuilder()
       .setTitle(':x: That user doesn\'t have enough coins to be robbed')
       .setColor('#000000');
     await db.close();
       return await interaction.editReply({ embeds: [embed]})
   }
+  if (chance > 2) {
+    let embed = new EmbedBuilder()
+    .setTitle(`😢 You were unsuccessful in robbing ${target}`)
+    .setColor('#000000');
+    await db.close();
+      return await interaction.editReply({ embeds: [embed]})
+  }
   let embed = new EmbedBuilder()
-  .setTitle(`:white_check_mark: You have robbed **${amount} coins from ${target} balance`)
+  .setTitle(`💰 You have robbed **${amount}** coins from ${target} balance`)
   .setColor('White');
   await db.add(`${interaction.user.id}.balance.coins`, amount)
   await db.subtract(`${target.id}.balance.coins`, amount)
   return await interaction.editReply({ embeds: [embed]})
-  } catch (error) {
-  console.log(`There was an error with the rob command: ${error}`)
-  return await interaction.editReply({ content: `:x: There was an error with the rob command. Please try again later!`})
-  }
   },
 }
