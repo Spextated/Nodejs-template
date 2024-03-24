@@ -45,12 +45,6 @@ module.exports = {
        .setColor('#000000');
        return await interaction.editReply({ embeds: [embed] })
     }
-      if (userData.items.some(item => item.name.includes('⚔️')) && items[id - 1].category === 'swords') {
-        let embed = new EmbedBuilder()
-         .setTitle(':x: In order to buy a new sword, you must sell your current sword')
-         .setColor('#000000');
-         return await interaction.editReply({ embeds: [embed] })
-      }
       
       if (userData.rank.level >= items[id - 1].level) {
         if (userData.balance.coins >= items[id - 1].price) {
