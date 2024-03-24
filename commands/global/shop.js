@@ -33,7 +33,7 @@ module.exports = {
         .setColor('#000000');
         return await interaction.editReply({ embeds: [embed] })
       }
-     if (userData.items.some(item => item.name === items[id - 1]).item) {
+     if (userData.items.some(item => item.name === items[id - 1].item)) {
        let embed = new EmbedBuilder()
        .setTitle(':x: You already own this item')
        .setColor('#000000');
