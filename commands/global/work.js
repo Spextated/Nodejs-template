@@ -38,7 +38,7 @@ module.exports = {
 
     if (chance < 25) {
     const embed = new EmbedBuilder()
-      .setTitle(`😢 You were fired from your job as a **${randomJob}** and lost ${coins.toLocaleString()} coins`)
+      .setTitle(`😢 You were fired from your job as a **${randomJob}** and lost **${coins.toLocaleString()}** coins`)
       .setColor('#000000');
       if ((balance - coins) <= 0) {
         await db.subtract(`${interaction.user.id}.balance.coins`, balance)
@@ -55,7 +55,7 @@ module.exports = {
     }
     
   const embed = new EmbedBuilder()
-    .setTitle(`💪 You worked as a **${randomJob}** and earned ${coins.toLocaleString()} coins`)
+    .setTitle(`💪 You worked as a **${randomJob}** and earned **${coins.toLocaleString()}** coins`)
     .setColor('White');
     await db.add(`${interaction.user.id}.balance.coins`, coins)
     return await interaction.editReply({ embeds: [embed] })

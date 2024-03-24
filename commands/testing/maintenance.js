@@ -6,7 +6,7 @@ module.exports = {
    data: new SlashCommandBuilder()
    .setName('maintenance')
    .setDescription('Start or end maintenance')
-   .addSubcommand(subcommand => subcommand.setName('start').setDescription('Start maintenance on Equinox (Bot Developer Only)')).addSubcommand(subcommand => subcommand.setName('end').setDescription('End maintenance on Equinox (Bot Developer Only)')), cooldown: 0, developer: true, async execute(interaction) {
+   .addSubcommand(subcommand => subcommand.setName('start').setDescription('Start maintenance on Equinox (Bot Developer Only)')).addSubcommand(subcommand => subcommand.setName('end').setDescription('End maintenance on Equinox (Bot Developer Only)')).addSubcommand(subcommand => subcommand.setName('status').setDescription('Status of the maintenance')), cooldown: 0, developer: true, async execute(interaction) {
      let subcommand = interaction.options.getSubcommand();
   await interaction.deferReply();
     if (subcommand === 'start') {
@@ -15,6 +15,8 @@ module.exports = {
   } else if (subcommand === 'end') {
   await db.set('maintenance', false);
   return await interaction.editReply({ content: 'Maintenance has ended on Equinox', ephemeral: true })
+  } else if (subcommand === 'status') {
+    return await interaction.editReply({ content: `Maintenance: **${await db.get('maintenance')}**`, ephemeral: true })
   }
    },
 }

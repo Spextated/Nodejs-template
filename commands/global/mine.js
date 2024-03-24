@@ -5,31 +5,32 @@ const db = new Database(process.env.mongoKey)
 module.exports = {
   data: new SlashCommandBuilder()
   .setName('mine')
-  .setDescription('Mine to get diamonds'), cooldown: 180, level: 5, async execute(interaction) {
+  .setDescription('Mine to get diamonds'), cooldown: 180, async execute(interaction) {
      await db.connect();
     await interaction.deferReply();
     let userData = await db.get(interaction.user.id);
    
-     let diamonds = Math.floor(Math.random() * 8) + 1;
-     if (userData.items.includes('⛏️ Bronze Pickaxe')) {
+     let diamonds = 8;
+     if (userData.items.some(item => item.name === '⛏️ Bronze Pickaxe')) {
       diamonds = diamonds + 2
     }
-    if (userData.items.includes('⛏️ Silver Pickaxe')) {
+    if (userData.items.some(item => item.name === '⛏️ Silver Pickaxe')) {
       diamonds = diamonds + 4;
     }
-     if (userData.items.includes('⛏️ Gold Pickaxe')) {
+     if (userData.items.some(item => item.name === '⛏️ Gold Pickaxe')) {
       diamonds = diamonds + 6;
     }
-     if (userData.items.includes('⛏️ Diamond Pickaxe')) {
+     if (userData.items.some(item => item.name === '⛏️ Diamond Pickaxe')) {
       diamonds = diamonds * 2;
     }
-     if (userData.items.includes('⛏️ Emerald Pickaxe')) {
+     if (userData.items.some(item => item.name === '⛏️ Emerald Pickaxe')) {
       diamonds = diamonds * 3;
     }
+    
 await db.add(`${interaction.user.id}.balance.diamonds`, diamonds)
        await db.close();
        let embed = new EmbedBuilder()
-       .setTitle(`⛏️ You mined and received ${diamonds} 💎`)
+       .setTitle(`⛏️ You mined and received **${diamonds}** 💎`)
        .setColor('White');
        return await interaction.editReply({ embeds: [embed]})
  },

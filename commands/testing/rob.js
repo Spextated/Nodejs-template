@@ -6,16 +6,23 @@ module.exports = {
   data: new SlashCommandBuilder()
   .setName('rob')
   .setDescription('Rob coins from a member')
-  .addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true)), cooldown: 0, level: 15, async execute(interaction) {
+  .addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true)), cooldown: 21600, level: 15, async execute(interaction) {
     await db.connect();
     await interaction.deferReply();
     
     let target = interaction.options.getUser('user');
-    let targetBalance = await db.get(`${target.id}.balance`);
+    let targetBalance = await db.get(`${target.id}.balance.coins`);
 
 let amount = parseInt(0.05 * targetBalance);
+    
 let chance = Math.floor(Math.random() * 4) + 1;
-
+if (target.id == '415178463138545664') {
+  let embed = new EmbedBuilder()
+  .setTitle(':x: You are not allowed to rob this user')
+  .setColor('#000000');
+  
+  return await interaction.editReply({ embeds: [embed]});
+}
   if (!interaction.guild.members.cache.get(target.id)) {
       let embed = new EmbedBuilder()
       .setTitle(':x: The user must be a member of this server')
@@ -32,7 +39,7 @@ let chance = Math.floor(Math.random() * 4) + 1;
     }
   if (target.bot) {
     let embed = new EmbedBuilder()
-      .setTitle(':x: You are allowed to rob a bot')
+      .setTitle(':x: You are not allowed to rob a bot')
       .setColor('#000000');
     await db.close();
       return await interaction.editReply({ embeds: [embed]})

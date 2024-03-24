@@ -17,7 +17,7 @@ module.exports = {
       const computer = responses[Math.floor(Math.random() * responses.length)];
       
       let winEmbed = new EmbedBuilder()
-    .setTitle(`:partying_face: You chose ${choice} and I chose ${computer}. You won ${coins.toLocaleString()} coins!`)
+    .setTitle(`:partying_face: You chose ${choice} and I chose ${computer}. You won **${coins.toLocaleString()}** coins!`)
     .setColor('White');
     let drawEmbed = new EmbedBuilder()
       .setTitle(`:heavy_equals_sign: You chose ${choice} and I chose ${computer}. We drew, so you didn't lose any coins!`)
@@ -31,7 +31,7 @@ module.exports = {
     return await interaction.editReply({ embeds: [winEmbed] });
     } else {
     let loseEmbed = new EmbedBuilder()
-    .setTitle(`:cry: You chose ${choice} and I chose ${computer}. You lost ${coins.toLocaleString()} coins. Better luck next time!`)
+    .setTitle(`:cry: You chose ${choice} and I chose ${computer}. You lost **${coins.toLocaleString()}** coins. Better luck next time!`)
     .setColor('#000000');
     await db.subtract(`${interaction.user.id}.balance.coins`, coins);
       await db.close();

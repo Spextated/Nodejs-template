@@ -14,7 +14,7 @@ module.exports = {
    let coins = Math.floor(Math.random() * 2500) + 15000;
     
   let rewardEmbed = new EmbedBuilder()
-      .setTitle(`🎁 You have claimed your daily reward of ${coins.toLocaleString()} coins`)
+      .setTitle(`🎁 You have claimed your daily reward of **${coins.toLocaleString()}** coins`)
       .setColor('White');
       
     if (!daily) {

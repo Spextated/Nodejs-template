@@ -5,20 +5,20 @@ const db = new QuickDB({ filePath: "../json.sqlite" });
 const { Database } = require('quickmongo')
 const dbTwo = new Database(process.env.mongoKey);
 const ms = require('enhanced-ms');
+var database = require('../index.js');
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
 
 const webhookClient = new WebhookClient({ id: process.env.webhookID2, token: process.env.webhookToken2 });
-
-const webhookClient2 = new WebhookClient({ id: process.env.webhookID3, token: process.env.webhookToken3 });
     
 let maintenance = await db.get('maintenance') || false;
 let banned_user = await db.get('blacklisted-users') || [];
 let banned_server = await db.get('blacklisted-guilds') || [];
 
 await dbTwo.connect();
+    
 let userData = await dbTwo.get(interaction.user.id);
     
 if (interaction.channel.type === 'DM') return;
@@ -75,6 +75,7 @@ if (command.developer) {
       return await interaction.editReply({ content: `:x: Only Bot Developers are allowed to use this command`, ephemeral: true });
     }
 }
+    
 if (command.level) {
   if (userData.rank.level < command.level) {
   let embed = new EmbedBuilder()
@@ -83,37 +84,17 @@ if (command.level) {
  }
 }
     
-if (interaction.commandName != "bot-info" || interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe" || interaction.commandName != "data-edit" || interaction.commandName != "data-info") {
-  if (!userData) {
-  await dbTwo.set(`${interaction.user.id}.rank`,{ level: 1, xp: 0 });
-    await dbTwo.set(`${interaction.user.id}.balance`, { coins: 0, diamonds: 0 });
-    await dbTwo.set(`${interaction.user.id}.items`, []);
+if (interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe" || interaction.commandName != "data-edit" || interaction.commandName != "data-info") {
+if (!userData) {
     
-let embed = new EmbedBuilder()
-.setTitle('New Player Data')
-.addFields({ name: 'Player Tag', value: interaction.user.tag, inline: false })
-.addFields({ name: 'Player ID', value: interaction.user.id, inline: false })
-.addFields({ name: 'Guild ID', value: interaction.guild.id, inline: false })
-.addFields({ name: 'Data Creation Date', value: `<t:${parseInt(Date.now() / 1000)}:F>`, inline: false })
-.addFields({ name: 'Data', value: `\`${JSON.stringify(await dbTwo.get(interaction.user.id))}\``, inline: false })
-  .setColor('#2F3136')
-  .setFooter({ text: `${await dbTwo.count()} Total Players` })
-    .setTimestamp();
+database.emit('newPlayer', interaction);
     
-  await webhookClient2.send({
-	content: '',
-	username: 'Equinox',
-	avatarURL: 'https://i.imgur.com/or0Oxrv.jpg',
-	embeds: [embed],
-}).catch(error => console.log(error));
-    
-  } else {
-    
+} else {
+  
   let xp = Math.floor(Math.random() * 20) + 5;
   let nextLevel = userData.rank.level * 100;
   if (userData.rank.xp + xp >= nextLevel) {
-    await dbTwo.add(`${interaction.user.id}.rank.level`, 1)
-    await dbTwo.set(`${interaction.user.id}.rank.xp`, (userData.rank.xp + xp) - nextLevel);
+    database.emit('levelUp', interaction.user.id, (userData.rank.xp + xp) - nextLevel);
   } else {
     await dbTwo.add(`${interaction.user.id}.rank.xp`, xp);
   }

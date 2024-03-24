@@ -32,13 +32,16 @@ module.exports = {
         balEmbed.addFields({ name: 'Next Weekly Reward', value: `> <t:${parseInt((Number(userInfo.weekly.time) + 604800000) / 1000) || 0}:R>`, inline: true })
         balEmbed.addFields({ name: 'Weeklies Claimed', value: `> ${userInfo.weekly.claimed || 0}`, inline: true })
         }
+    if (userInfo.health) {
+      balEmbed.addFields({ name: 'Health', value: `> ${userInfo.health} ❤️`, inline: true })
+    }
+    if (userInfo.duels) {
+      balEmbed.addFields({ name: '⚔️ Duel Stats', value: `> Wins: ${userInfo.duels.wins || 0}\n> Losses: ${userInfo.duels.losses || 0}`, inline: true });
+    }
         if (userInfo.rank) {
           let maxXP = Number(userInfo.rank.level) * 100;
         balEmbed.addFields({ name: 'Rank', value: `> Level ${userInfo.rank.level || 1} (${userInfo.rank.xp || 0}/${maxXP} XP)`, inline: true })
         }
-      if (userInfo.work) {
-        balEmbed.addFields({ name: 'Shifts Completed', value: `> ${userInfo.work.shifts || 0}`, inline: true })
-      }
        await db.close();
       return await interaction.editReply({ embeds: [balEmbed] });
   },

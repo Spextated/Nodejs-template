@@ -8,11 +8,16 @@ app.listen(port, () =>
 	console.log(`App listening at http://localhost:${port}`)
 );
 
+
 //----------------------------------//
 
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
+
+const EventEmitter = require('events');
+const database = new EventEmitter();
+module.exports = database;
 
 const { Database } = require("quickmongo");
 const db = new Database(process.env.mongoKey);
@@ -50,6 +55,18 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+const databaseFiles = fs.readdirSync('./database').filter(file => file.endsWith('.js'));
+
+for (const file of databaseFiles) {
+  const event = require(`./database/${file}`);
+  if (event.once) {
+    database.once(event.name, (...args) => event.execute(...args));
+  } else {
+    database.on(event.name, (...args) => event.execute(...args));
+  }
+}
+
 const commandFiles = fs
 	.readdirSync('./commands/global')
 	.filter(file => file.endsWith('.js'));

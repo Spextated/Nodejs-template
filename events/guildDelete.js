@@ -14,8 +14,7 @@ const owner = await guild.fetchOwner();
 const embed = new EmbedBuilder()
 	.setTitle(`Removed from **${guild.name}'s** Guild`)
   .addFields({ name: 'Guild Owner', value: `${owner.user.tag}`, inline: true }, { name: 'Guild Owner ID', value: `${guild.ownerId}`, inline: true }, { name: 'Guild Member Count', value: `${guild.memberCount}`, inline: true }, { name: 'Joined At', value: `<t:${parseInt(guild.joinedAt / 1000)}>`, inline: true })
-  .setThumbnail(`${guild.iconURL()}`)
-  .setFooter({ text: `Now in ${guild.client.guilds.cache.size} server(s)`})
+  .setFooter({ text: `Guild ID: ${guild.id} | Now in ${guild.client.guilds.cache.size} server(s)`})
   .setColor('#2F3136')
   .setTimestamp();
 
