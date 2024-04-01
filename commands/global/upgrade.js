@@ -12,7 +12,7 @@ module.exports = {
    await db.connect();
     const userData = await db.get(interaction.user.id);
     await interaction.deferReply();
-    const upgrades = [{ id: 1, upgrade: '+1 Damage', category: 'damage', description: '+1 damage on your current sword', currency: '🪙', price: 10000 }, { id: 2, upgrade: '+1 Health', category: 'health', description: '+1 health on your health total', currency: '💎', price: 2 }];
+    const upgrades = [{ id: 1, upgrade: '+1 Damage', category: 'damage', description: '+1 damage on your current sword', currency: '🪙', price: 10000 }, { id: 2, upgrade: '+1 Defense', category: 'defense', description: '+1 defense on your armor total', currency: '💎', price: 6 }];
     
     if (subcommand === 'list') {
       let embed = new EmbedBuilder()
@@ -53,9 +53,9 @@ if (upgrades[id - 1].category === 'damage' && userData.items[index].damage == (u
   return await interaction.editReply({ embeds: [embed]})
 }
 
-if (upgrades[id - 1].category === 'health' && userData.health == (userData.rank.level * 100)) {
+if (upgrades[id - 1].category === 'defense' && userData.defense == (userData.rank.level * 10)) {
   let embed = new EmbedBuilder()
-  .setTitle(':x: You need to level up in order to upgrade your health further')
+  .setTitle(':x: You need to level up in order to upgrade your defense further')
   .setColor('#000000');
   return await interaction.editReply({ embeds: [embed]})
 }
@@ -80,12 +80,12 @@ await db.add(`${interaction.user.id}.items[${index}].damage`, amount);
 }
       
 if (upgrades[id - 1].currency === '💎') {
-  if (userData.balance.diamonds >= (upgrades[id - 1].price * amount) && upgrades[id - 1].category === 'health') {
+  if (userData.balance.diamonds >= (upgrades[id - 1].price * amount) && upgrades[id - 1].category === 'defense') {
   await db.subtract(`${interaction.user.id}.balance.diamonds`, (upgrades[id - 1].price * amount));
     
-  await db.add(`${interaction.user.id}.health`, amount);
+  await db.add(`${interaction.user.id}.defense`, amount);
   let embed = new EmbedBuilder()
-    .setTitle(`✅ Successfully increased your health by **${amount}**`)
+    .setTitle(`✅ Successfully increased your defense by **${amount}**`)
     .setColor('White');
   return await interaction.editReply({ embeds: [embed]})
 } else {
