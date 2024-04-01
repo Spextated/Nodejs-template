@@ -19,8 +19,9 @@ module.exports = {
     await db.set(`${interaction.user.id}.rank`, { level: 1, xp: 0 });
     await db.set(`${interaction.user.id}.strength`, { strength: 0 });
     await db.set(`${interaction.user.id}.ability`, { name: `${ability.name}`, percentage: `${ability.power}`, level: 0, xp: 0});
-      await db.set(`${interaction.user.id}.balance`, { coins: 0, diamonds: 0 });
+    await db.set(`${interaction.user.id}.balance`, { coins: 0, diamonds: 0 });
     await db.set(`${interaction.user.id}.health`, 100);
+    await db.set(`${interaction.user.id}.defense`, 0);
     await db.set(`${interaction.user.id}.duels`, { wins: 0, losses: 0 })
     await db.set(`${interaction.user.id}.items`, []);
 
