@@ -13,7 +13,7 @@ module.exports = {
     let subcommand = interaction.options.getSubcommand();
     await db.connect();
     let userData = await db.get(interaction.user.id);
-    const items = [{id: 1, category: 'pickaxe', item: '⛏Bronze Pickaxe', description: 'Gain 25% more diamonds', price: 100000, level: 5}, {id: 2, category: 'pickaxe', item: '⛏️ Silver Pickaxe', description: 'Gain 50% more diamonds', price: 250000, level: 10}, {id: 3, category: 'pickaxe', item: '⛏️ Gold Pickaxe', description: 'Gain 75% more diamonds', price: 500000, level: 15}, {id: 4, category: 'pickaxe', item: '⛏️ Diamond Pickaxe', description: 'Gain 2x the diamonds', price: 950000, level: 22}, { id: 5, category: 'pickaxe', item: '⛏️ Emerald Pickaxe', description: 'Gain 3x the diamonds', price: 2000000, level: 30}, { id: 6, category: 'swords', item: '⚔️ Upgradable Sword', price: 0, level: 1, damage: 10}];
+    const items = [{id: 1, category: 'pickaxe', item: '⛏Bronze Pickaxe', description: 'Gain 25% more diamonds', price: 100000, level: 5}, {id: 2, category: 'pickaxe', item: '⛏️ Silver Pickaxe', description: 'Gain 50% more diamonds', price: 250000, level: 10}, {id: 3, category: 'pickaxe', item: '⛏️ Gold Pickaxe', description: 'Gain 75% more diamonds', price: 500000, level: 15}, {id: 4, category: 'pickaxe', item: '⛏️ Diamond Pickaxe', description: 'Gain 2x the diamonds', price: 950000, level: 22}, { id: 5, category: 'pickaxe', item: '⛏️ Emerald Pickaxe', description: 'Gain 3x the diamonds', price: 2000000, level: 30}, { id: 6, category: 'swords', item: '⚔️ Upgradable Sword', description: 'A sword that progresses with you', price: 0, level: 1, damage: 10}, { id: 7, category: 'defense', item: '🛡️ Upgradable Armor', description: 'An armor that progresses with you', price: 0, defense: 5}];
     if (subcommand === 'items') {
       
       let embed = new EmbedBuilder()
@@ -80,6 +80,10 @@ try {
     if (items[id - 1].category === 'swords') {
       await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item, damage: items[id - 1].damage });
     } 
+    if (items[id - 1].category === 'defense') {
+      await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item, defense: items[id - 1].defense });
+      await db.add(`${interaction.user.id}.defense`, items[id - 1].defense });
+    }
   if (items[id - 1].category === 'pickaxe') {
 await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item });
 }
@@ -120,7 +124,7 @@ await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item });
        .setColor('#000000');
        return await interaction.editReply({ embeds: [embed] })
      }
-      if (items[id - 1].item === '⚔️ Upgradable Sword') {
+      if (items[id - 1].item === '⚔️ Upgradable Sword' || items[id - 1].item === '🛡️ Upgradable Armor') {
         let embed = new EmbedBuilder()
         .setTitle(':x: This item cannot be sold')
         .setColor('#000000');
