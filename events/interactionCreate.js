@@ -89,16 +89,6 @@ if (!userData) {
     
 database.emit('newPlayer', interaction);
     
-} else {
-  
-  let xp = Math.floor(Math.random() * 20) + 5;
-  let nextLevel = userData.rank.level * 100;
-  if (userData.rank.xp + xp >= nextLevel) {
-    database.emit('levelUp', interaction.user.id, (userData.rank.xp + xp) - nextLevel);
-  } else {
-    await dbTwo.add(`${interaction.user.id}.rank.xp`, xp);
-  }
-    
 }
   await dbTwo.close();
 }
