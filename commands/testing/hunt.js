@@ -16,7 +16,7 @@ module.exports = {
     const creature = creatures[Math.floor(Math.random() * creatures.length)];
     const defense = 10;
     const level = userData.rank.level;
-    const health = parseInt((100 * 1.15) * level);
+    const health = parseInt((100 * 1.15) * level) + 1;
     const fakeDamage = (damageChance * level);
     const damage = parseInt((fakeDamage * (255 - userData.defense) / 256) + 1);
 
