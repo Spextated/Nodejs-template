@@ -17,7 +17,10 @@ module.exports = {
       .setTimestamp()
 .setThumbnail(interaction.user.displayAvatarURL({ extension: 'png'}))
       .setColor('#000000');
-      
+      if (userInfo.ability) {
+        let xpMax = userInfo.ability.level * 100;
+        balEmbed.addFields({ name: 'Ability', value: `> ${userInfo.ability.name} - Level ${userInfo.ability.level} (${userInfo.ability.xp}/${xpMax})`, inline: true });
+      }
       if (userInfo.balance) {
         balEmbed.addFields({ name: 'Balance', value: `> ${userInfo.balance.coins.toLocaleString() || 0} :coin:\n> ${userInfo.balance.diamonds.toLocaleString() || 0} 💎`, inline: true })
         }
@@ -33,7 +36,10 @@ module.exports = {
         balEmbed.addFields({ name: 'Weeklies Claimed', value: `> ${userInfo.weekly.claimed || 0}`, inline: true })
         }
     if (userInfo.health) {
-      balEmbed.addFields({ name: 'Health', value: `> ${userInfo.health} ❤️`, inline: true })
+      balEmbed.addFields({ name: 'Health', value: `> ${userInfo.health.toLocaleString()} ❤️`, inline: true })
+    }
+    if (userInfo.defense) {
+      balEmbed.addFields({ name: 'Defense', value: `> ${userInfo.defense.toLocaleString()} 🛡️`, inline: true });
     }
     if (userInfo.duels) {
       balEmbed.addFields({ name: '⚔️ Duel Stats', value: `> Wins: ${userInfo.duels.wins || 0}\n> Losses: ${userInfo.duels.losses || 0}`, inline: true });
