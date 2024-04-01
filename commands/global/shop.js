@@ -82,7 +82,7 @@ try {
     } 
     if (items[id - 1].category === 'defense') {
       await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item, defense: items[id - 1].defense });
-      await db.add(`${interaction.user.id}.defense`, items[id - 1].defense });
+      await db.add(`${interaction.user.id}.defense`, items[id - 1].defense);
     }
   if (items[id - 1].category === 'pickaxe') {
 await db.push(`${interaction.user.id}.items`, { name: items[id - 1].item });
