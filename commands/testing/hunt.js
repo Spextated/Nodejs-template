@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 const { Database } = require('quickmongo')
 const db = new Database(process.env.mongoKey);
 const wait = require('node:timers/promises').setTimeout;
+const database = require('.../index.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -47,19 +48,33 @@ for (let i = 0; i < userData.items; i++) {
     await wait(7000);
 
 if (health / userDamage > (userData.health / damage)) {
+        let coins = Math.floor(Math.random() * 250) + 500;
         let embed1 = new EmbedBuilder()
-        .setTitle(`😰 You ran away and dropped some coins along the way because you weren't able to defeat the **${creature}**`)
+        .setTitle(`😰 You ran away and dropped ${coins} coins along the way because you weren't able to defeat the **${userData.rank.level} ${creature}**`)
           .setFooter({ text: 'Tip: Upgrade your damage & defense at the upgrade shop'})
         .setColor('#000000');
-
+if (userData.balance.coins - coins <= 0) {
+   await db.set(`${interaction.user.id}.balance.coins`, 0);
+  } else {
+    await db.subtract(`${interaction.user.id}.balance.coins`, coins);
+  }
         return await interaction.editReply({ embeds: [embed1] });
       }
 
       if (health / userDamage < (userData.health / damage)) {
+    let xp = Math.floor(Math.random() * 10) + 1;
+    let coins = Math.floor(Math.random() * 1000) + 500;
+    
     let embed2 = new EmbedBuilder()
-      .setTitle(`😎 You defeated the **${creature}** and received some coins!`)
+      .setTitle(`😎 You defeated the **${userData.rank.level} ${creature}** and received ${coins.toLocaleString()} coins and ${xp} XP!`)
       .setColor('White');
-
+      if (userData.rank.xp + xp >= 100 * (userData.rank.level * 1.5)) {
+        let leftoverXp = (userData.rank.xp + xp) - (100 * (userData.rank.level * 1.5));
+         database.emit('levelUp', interaction.user.id, leftoverXp);
+      } else {
+         await db.add(`${interaction.user.id}.rank.xp`, xp);
+      }
+      await db.add(`${interaction.user.id}.balance.coins`, coins);
       return await interaction.editReply({ embeds: [embed2] });
       }
 
