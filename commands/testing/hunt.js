@@ -18,7 +18,7 @@ module.exports = {
     const level = userData.rank.level;
     const health = parseInt((100 * 1.15) * level) + 1;
     const fakeDamage = (damageChance * level);
-    const damage = parseInt(fakeDamage / (defense + 100) / 100);
+    const damage = parseInt(fakeDamage / ((userData.defense + 100) / 100));
 
 if (!userData.items.some(item => item.name.includes('⚔️'))) {
   const embed = new EmbedBuilder()
@@ -34,7 +34,7 @@ for (let i = 0; i < userData.items; i++) {
       index = i;
   }
 }
-  let userDamage = parseInt(userData.items[index].damage / (defense + 100) / 100);
+  let userDamage = parseInt(userData.items[index].damage / ((defense + 100) / 100));
   let embed = new EmbedBuilder()
     .setTitle(`⚔️ You found a **${creature}**`)
     .addFields({ name: 'You', value: `️Health: ${userData.health} ❤️\nDamage: ${userDamage} 💥`, inline: true })
