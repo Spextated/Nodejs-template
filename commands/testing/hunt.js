@@ -50,7 +50,7 @@ for (let i = 0; i < userData.items; i++) {
 if (health / userDamage > (userData.health / damage)) {
         let coins = Math.floor(Math.random() * 250) + 500;
         let embed1 = new EmbedBuilder()
-        .setTitle(`😰 You ran away and dropped ${coins} coins along the way because you weren't able to defeat the **${userData.rank.level} ${creature}**`)
+        .setTitle(`😰 You ran away and dropped **${coins}** coins along the way because you weren't able to defeat the **Level ${userData.rank.level} ${creature}**`)
           .setFooter({ text: 'Tip: Upgrade your damage & defense at the upgrade shop'})
         .setColor('#000000');
 if (userData.balance.coins - coins <= 0) {
@@ -66,7 +66,7 @@ if (userData.balance.coins - coins <= 0) {
     let coins = Math.floor(Math.random() * 1000) + 500;
     
     let embed2 = new EmbedBuilder()
-      .setTitle(`😎 You defeated the **${userData.rank.level} ${creature}** and received ${coins.toLocaleString()} coins and ${xp} XP!`)
+      .setTitle(`😎 You defeated the **Level ${userData.rank.level} ${creature}** and received **${coins.toLocaleString()}** coins and **${xp}** XP!`)
       .setColor('White');
       if (userData.rank.xp + xp >= 100 * (userData.rank.level * 1.5)) {
         let leftoverXp = (userData.rank.xp + xp) - (100 * (userData.rank.level * 1.5));
@@ -80,7 +80,7 @@ if (userData.balance.coins - coins <= 0) {
 
       if (health / userDamage == (userData.health / damage)) {
       let embed3 = new EmbedBuilder()
-        .setTitle(`You & the **${creature}** were evenly matched, so you both ran away`)
+        .setTitle(`You & the **Level ${userData.rank.level} ${creature}** were evenly matched, so you both ran away`)
         .setColor('#000000');
         return await interaction.editReply({ embeds: [embed3] });
     }   
