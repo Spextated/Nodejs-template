@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 const { Database } = require('quickmongo')
 const db = new Database(process.env.mongoKey);
 const wait = require('node:timers/promises').setTimeout;
-const database = require('.../index.js');
+const database = require('..../index.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
