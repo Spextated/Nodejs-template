@@ -18,7 +18,7 @@ module.exports = {
     const level = userData.rank.level;
     const health = parseInt((100 * 1.15) * level) + 1;
     const fakeDamage = (damageChance * level);
-    const damage = parseInt((fakeDamage * (255 - userData.defense) / 256) + 1);
+    const damage = parseInt(fakeDamage / (defense + 100) / 100);
 
 if (!userData.items.some(item => item.name.includes('⚔️'))) {
   const embed = new EmbedBuilder()
@@ -34,7 +34,7 @@ for (let i = 0; i < userData.items; i++) {
       index = i;
   }
 }
-  let userDamage = parseInt((userData.items[index].damage * (255 - defense) / 256) + 1);
+  let userDamage = parseInt(userData.items[index].damage / (defense + 100) / 100);
   let embed = new EmbedBuilder()
     .setTitle(`⚔️ You found a **${creature}**`)
     .addFields({ name: 'You', value: `️Health: ${userData.health} ❤️\nDamage: ${userDamage} 💥`, inline: true })
@@ -46,16 +46,16 @@ for (let i = 0; i < userData.items; i++) {
 
     await wait(7000);
 
-if (health / userData.items[index].damage > (userData.health / damage)) {
+if (health / userDamage > (userData.health / damage)) {
         let embed1 = new EmbedBuilder()
         .setTitle(`😰 You ran away and dropped some coins along the way because you weren't able to defeat the **${creature}**`)
-          .setFooter({ text: 'Tip: Upgrade your damage & health at the upgrade shop'})
+          .setFooter({ text: 'Tip: Upgrade your damage & defense at the upgrade shop'})
         .setColor('#000000');
 
         return await interaction.editReply({ embeds: [embed1] });
       }
 
-      if (health / userData.items[index].damage < (userData.health / damage)) {
+      if (health / userDamage < (userData.health / damage)) {
     let embed2 = new EmbedBuilder()
       .setTitle(`😎 You defeated the **${creature}** and received some coins!`)
       .setColor('White');
@@ -63,7 +63,7 @@ if (health / userData.items[index].damage > (userData.health / damage)) {
       return await interaction.editReply({ embeds: [embed2] });
       }
 
-      if (health / userData.items[index].damage == (userData.health / damage)) {
+      if (health / userDamage == (userData.health / damage)) {
       let embed3 = new EmbedBuilder()
         .setTitle(`You & the **${creature}** were evenly matched, so you both ran away`)
         .setColor('#000000');
