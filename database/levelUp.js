@@ -12,7 +12,7 @@ await db.set(`${player}.rank.xp`, xp);
 
 let userData = await db.get(`${player}`);
 
-await db.set(`${player}.health`, parseInt((100 * 1.15) * userData.rank.level)) + 1);
+await db.set(`${player}.health`, parseInt((100 * 1.15) * userData.rank.level) + 1);
     
   }
 }
