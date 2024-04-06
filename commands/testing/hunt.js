@@ -62,7 +62,7 @@ if (userData.balance.coins - coins <= 0) {
 
       if (health / userDamage < (userData.health / damage)) {
     let xp = Math.floor(Math.random() * 5) + 5;
-    let coins = Math.floor(Math.random() * 1000) + 500;
+    let coins = Math.floor(Math.random() * 750) + 500;
     
     let embed2 = new EmbedBuilder()
       .setTitle(`😎 You defeated the **Level ${userData.rank.level} ${creature}** and received **${coins.toLocaleString()}** coins and **${xp}** XP!`)
