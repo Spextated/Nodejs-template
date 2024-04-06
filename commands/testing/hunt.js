@@ -15,7 +15,7 @@ module.exports = {
     
     let damageChance = Math.floor(Math.random() * 10) + 1;
     const creature = creatures[Math.floor(Math.random() * creatures.length)];
-    const defense = 10;
+    const defense = 5 * userData.rank.level;
     const level = userData.rank.level;
     const health = parseInt((100 * 1.15) * level) + 1;
     const fakeDamage = (damageChance * level);
@@ -68,8 +68,8 @@ if (userData.balance.coins - coins <= 0) {
     let embed2 = new EmbedBuilder()
       .setTitle(`😎 You defeated the **Level ${userData.rank.level} ${creature}** and received **${coins.toLocaleString()}** coins and **${xp}** XP!`)
       .setColor('White');
-      if (userData.rank.xp + xp >= 100 * (userData.rank.level * 1.5)) {
-        let leftoverXp = (userData.rank.xp + xp) - (100 * (userData.rank.level * 1.5));
+      if (userData.rank.xp + xp >= 50 * (userData.rank.level * 1.5)) {
+        let leftoverXp = (userData.rank.xp + xp) - (50 * (userData.rank.level * 1.5));
          database.emit('levelUp', interaction.user.id, leftoverXp);
       } else {
          await db.add(`${interaction.user.id}.rank.xp`, xp);
