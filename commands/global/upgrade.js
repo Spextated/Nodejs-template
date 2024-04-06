@@ -7,7 +7,7 @@ module.exports = {
   .setName('upgrade')
   .setDescription('Upgrade an sword or your health')
   .addSubcommand(option => option.setName('list').setDescription('List of available upgrades'))
-  .addSubcommand(option => option.setName('buy').setDescription('Buy an upgrade').addIntegerOption(option => option.setName('id').setDescription('What ID number is the upgrade you want to buy?').setRequired(true)).addIntegerOption(option => option.setName('amount').setDescription('How much do you want to upgrade your item or health?').setMinValue(1).setRequired(true))), cooldown: 5, async execute(interaction) {
+  .addSubcommand(option => option.setName('buy').setDescription('Buy an upgrade').addIntegerOption(option => option.setName('id').setDescription('What ID number is the upgrade you want to buy?').setRequired(true)).addIntegerOption(option => option.setName('amount').setDescription('How much do you want to upgrade your sword or defense?').setMinValue(1).setRequired(true))), cooldown: 5, async execute(interaction) {
     const subcommand = interaction.options.getSubcommand();
    await db.connect();
     const userData = await db.get(interaction.user.id);
@@ -46,16 +46,32 @@ for (let i = 0; i < userData.items.length; i++) {
     break;
   }
 }
-if (upgrades[id - 1].category === 'damage' && userData.items[index].damage == (userData.rank.level * 6) * 2) {
+if (upgrades[id - 1].category === 'damage' && userData.items[index].damage >= (userData.rank.level * 6) * 2) {
   let embed = new EmbedBuilder()
   .setTitle(':x: You need to level up in order to upgrade your damage further')
   .setColor('#000000');
   return await interaction.editReply({ embeds: [embed]})
 }
 
-if (upgrades[id - 1].category === 'defense' && userData.defense == (userData.rank.level * 6)) {
+if (upgrades[id - 1].category === 'defense' && userData.defense >= (userData.rank.level * 6)) {
   let embed = new EmbedBuilder()
   .setTitle(':x: You need to level up in order to upgrade your defense further')
+  .setColor('#000000');
+  return await interaction.editReply({ embeds: [embed]})
+}
+      
+if (upgrades[id - 1].category === 'damage' && userData.items[index].damage + amount > (userData.rank.level * 6) * 2) {
+  let maxDamage = (userData.rank.level * 6) * 2;
+  let embed = new EmbedBuilder()
+  .setTitle(`:x: You need to level up in order to upgrade your damage further (Max damage at level ${userData.rank.level}: **${maxDamage}**)`)
+  .setColor('#000000');
+  return await interaction.editReply({ embeds: [embed]})
+}
+      
+if (upgrades[id - 1].category === 'defense' && userData.defense + amount > (userData.rank.level * 6)) {
+  let maxDefense = userData.rank.level * 6;
+  let embed = new EmbedBuilder()
+  .setTitle(`:x: You need to level up in order to upgrade your defense further (Max defense at level ${userData.rank.level}: **${maxDefense}**)`)
   .setColor('#000000');
   return await interaction.editReply({ embeds: [embed]})
 }
