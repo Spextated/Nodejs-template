@@ -53,7 +53,7 @@ if (upgrades[id - 1].category === 'damage' && userData.items[index].damage >= (u
   return await interaction.editReply({ embeds: [embed]})
 }
 
-if (upgrades[id - 1].category === 'defense' && userData.defense >= (userData.rank.level * 6)) {
+if (upgrades[id - 1].category === 'defense' && userData.defense >= (userData.rank.level * 5) * 2) {
   let embed = new EmbedBuilder()
   .setTitle(':x: You need to level up in order to upgrade your defense further')
   .setColor('#000000');
@@ -68,8 +68,8 @@ if (upgrades[id - 1].category === 'damage' && userData.items[index].damage + amo
   return await interaction.editReply({ embeds: [embed]})
 }
       
-if (upgrades[id - 1].category === 'defense' && userData.defense + amount > (userData.rank.level * 6)) {
-  let maxDefense = userData.rank.level * 6;
+if (upgrades[id - 1].category === 'defense' && userData.defense + amount > (userData.rank.level * 5) * 2) {
+  let maxDefense = (userData.rank.level * 5) * 2;
   let embed = new EmbedBuilder()
   .setTitle(`:x: You need to level up in order to upgrade your defense further (Max defense at level ${userData.rank.level}: **${maxDefense}**)`)
   .setColor('#000000');
