@@ -12,7 +12,7 @@ module.exports = {
    await db.connect();
     const userData = await db.get(interaction.user.id);
     await interaction.deferReply();
-    const upgrades = [{ id: 1, upgrade: '+1 Damage', category: 'damage', description: '+1 damage on your current sword', currency: '🪙', price: 10000 }, { id: 2, upgrade: '+1 Defense', category: 'defense', description: '+1 defense on your armor total', currency: '💎', price: 6 }];
+    const upgrades = [{ id: 1, upgrade: '+1 Damage', category: 'damage', description: '+1 damage on your current sword', currency: '🪙', price: 2000 }, { id: 2, upgrade: '+1 Defense', category: 'defense', description: '+1 defense on your armor total', currency: '💎', price: 4 }];
     
     if (subcommand === 'list') {
       let embed = new EmbedBuilder()
@@ -46,14 +46,14 @@ for (let i = 0; i < userData.items.length; i++) {
     break;
   }
 }
-if (upgrades[id - 1].category === 'damage' && userData.items[index].damage == (userData.rank.level * 10) * 2) {
+if (upgrades[id - 1].category === 'damage' && userData.items[index].damage == (userData.rank.level * 6) * 2) {
   let embed = new EmbedBuilder()
   .setTitle(':x: You need to level up in order to upgrade your damage further')
   .setColor('#000000');
   return await interaction.editReply({ embeds: [embed]})
 }
 
-if (upgrades[id - 1].category === 'defense' && userData.defense == (userData.rank.level * 10)) {
+if (upgrades[id - 1].category === 'defense' && userData.defense == (userData.rank.level * 6)) {
   let embed = new EmbedBuilder()
   .setTitle(':x: You need to level up in order to upgrade your defense further')
   .setColor('#000000');
