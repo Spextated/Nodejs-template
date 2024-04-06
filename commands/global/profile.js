@@ -27,14 +27,6 @@ module.exports = {
         if (userInfo.bank) {
         balEmbed.addFields({ name: 'Bank Balance', value: `> ${userInfo.bank.coins.toLocaleString() || 0} :coin:`, inline: true })
         }
-        if (userInfo.daily) {
-        balEmbed.addFields({ name: 'Next Daily Reward', value: `> <t:${parseInt((Number(userInfo.daily.time) + 86400000) / 1000) || 0}:R>`, inline: true })
-        balEmbed.addFields({ name: 'Dailies Claimed', value: `> ${userInfo.daily.claimed || 0}`, inline: true })
-        }
-        if (userInfo.weekly) {
-        balEmbed.addFields({ name: 'Next Weekly Reward', value: `> <t:${parseInt((Number(userInfo.weekly.time) + 604800000) / 1000) || 0}:R>`, inline: true })
-        balEmbed.addFields({ name: 'Weeklies Claimed', value: `> ${userInfo.weekly.claimed || 0}`, inline: true })
-        }
     if (userInfo.health) {
       balEmbed.addFields({ name: 'Health', value: `> ${userInfo.health.toLocaleString()} ❤️`, inline: true })
     }
