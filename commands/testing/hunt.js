@@ -13,7 +13,7 @@ module.exports = {
     const userData = await db.get(interaction.user.id);
     const creatures = ['Zombie', 'Skeleton', 'Spider', 'Slime', 'Ghost', 'Bear', 'Vampire', 'Werewolf', 'Unicorn', 'Dragon', 'Goblin', 'Gnome', 'Fairy'];
     
-    let damageChance = Math.floor(Math.random() * 10) + 1;
+    let damageChance = Math.floor(Math.random() * 5) + 5;
     const creature = creatures[Math.floor(Math.random() * creatures.length)];
     const defense = 5 * userData.rank.level;
     const level = userData.rank.level;
@@ -38,8 +38,8 @@ for (let i = 0; i < userData.items; i++) {
   let userDamage = parseInt(userData.items[index].damage / ((defense + 100) / 100));
   let embed = new EmbedBuilder()
     .setTitle(`⚔️ You found a **${creature}**`)
-    .addFields({ name: 'You', value: `️Health: ${userData.health} ❤️\nDamage: ${userDamage} 💥`, inline: true })
-    .addFields({ name: `Level ${level} ${creature}`, value: `️Health: ${health} ❤️\n️Damage: ${damage} 💥`, inline: true })
+    .addFields({ name: 'You', value: `️Health: ${userData.health} ❤️\nDamage: ${userDamage} 💥\nDefense: ${userData.defense} 🛡️`, inline: true })
+    .addFields({ name: `Level ${level} ${creature}`, value: `️Health: ${health} ❤️\n️Damage: ${damage} 💥\nDefense: ${defense} 🛡️`, inline: true })
     .setColor('White')
     .setTimestamp();
     
@@ -62,7 +62,7 @@ if (userData.balance.coins - coins <= 0) {
       }
 
       if (health / userDamage < (userData.health / damage)) {
-    let xp = Math.floor(Math.random() * 10) + 1;
+    let xp = Math.floor(Math.random() * 5) + 5;
     let coins = Math.floor(Math.random() * 1000) + 500;
     
     let embed2 = new EmbedBuilder()
