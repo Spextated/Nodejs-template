@@ -21,6 +21,10 @@ module.exports = {
         let xpMax = userInfo.ability.level * 100;
         balEmbed.addFields({ name: 'Ability', value: `> ${userInfo.ability.name} - Level ${userInfo.ability.level} (${userInfo.ability.xp}/${xpMax})`, inline: true });
       }
+      if (userInfo.rank) {
+          let maxXP = 50 * (1.5 * userInfo.rank.level);
+        balEmbed.addFields({ name: 'Rank', value: `> Level ${userInfo.rank.level || 1} (${userInfo.rank.xp || 0}/${maxXP} XP)`, inline: true })
+        }
       if (userInfo.balance) {
         balEmbed.addFields({ name: 'Balance', value: `> ${userInfo.balance.coins.toLocaleString() || 0} :coin:\n> ${userInfo.balance.diamonds.toLocaleString() || 0} 💎`, inline: true })
         }
@@ -36,10 +40,6 @@ module.exports = {
     if (userInfo.duels) {
       balEmbed.addFields({ name: '⚔️ Duel Stats', value: `> Wins: ${userInfo.duels.wins || 0}\n> Losses: ${userInfo.duels.losses || 0}`, inline: true });
     }
-        if (userInfo.rank) {
-          let maxXP = 50 * (1.5 * userData.rank.level);
-        balEmbed.addFields({ name: 'Rank', value: `> Level ${userInfo.rank.level || 1} (${userInfo.rank.xp || 0}/${maxXP} XP)`, inline: true })
-        }
        await db.close();
       return await interaction.editReply({ embeds: [balEmbed] });
   },
