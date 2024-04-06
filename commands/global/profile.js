@@ -37,7 +37,7 @@ module.exports = {
       balEmbed.addFields({ name: '⚔️ Duel Stats', value: `> Wins: ${userInfo.duels.wins || 0}\n> Losses: ${userInfo.duels.losses || 0}`, inline: true });
     }
         if (userInfo.rank) {
-          let maxXP = Number(userInfo.rank.level) * 100;
+          let maxXP = 50 * (1.5 * userData.rank.level);
         balEmbed.addFields({ name: 'Rank', value: `> Level ${userInfo.rank.level || 1} (${userInfo.rank.xp || 0}/${maxXP} XP)`, inline: true })
         }
        await db.close();
