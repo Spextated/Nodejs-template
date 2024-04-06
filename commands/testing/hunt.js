@@ -13,7 +13,7 @@ module.exports = {
     const userData = await db.get(interaction.user.id);
     const creatures = ['Zombie', 'Skeleton', 'Spider', 'Slime', 'Ghost', 'Bear', 'Vampire', 'Werewolf', 'Unicorn', 'Dragon', 'Goblin', 'Gnome', 'Fairy'];
     
-    let damageChance = ((Math.floor(Math.random() * 5) + 5) * userData.rank.level) * 2;
+    let damageChance = ((Math.floor(Math.random() * 5) + 5) * userData.rank.level);
     const creature = creatures[Math.floor(Math.random() * creatures.length)];
     const defense = 5 * userData.rank.level;
     const level = userData.rank.level;
