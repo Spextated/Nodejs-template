@@ -67,12 +67,8 @@ if (userData.balance.coins - coins <= 0) {
     let embed2 = new EmbedBuilder()
       .setTitle(`😎 You defeated the **Level ${userData.rank.level} ${creature}** and received **${coins.toLocaleString()}** coins and **${xp}** XP!`)
       .setColor('White');
-      if (userData.rank.xp + xp >= 50 * (userData.rank.level * 1.5)) {
-        let leftoverXp = (userData.rank.xp + xp) - (50 * (userData.rank.level * 1.5));
-         database.emit('levelUp', interaction.user.id, leftoverXp);
-      } else {
-         await db.add(`${interaction.user.id}.rank.xp`, xp);
-      }
+      
+      database.emit('addXp', (interaction.user.id, xp));
       await db.add(`${interaction.user.id}.balance.coins`, coins);
       return await interaction.editReply({ embeds: [embed2] });
       }
