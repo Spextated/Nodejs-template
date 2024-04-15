@@ -68,7 +68,7 @@ if (userData.balance.coins - coins <= 0) {
       .setTitle(`😎 You defeated the **Level ${userData.rank.level} ${creature}** and received **${coins.toLocaleString()}** coins and **${xp}** XP!`)
       .setColor('White');
       
-      database.emit('addXp', (interaction.user.id, xp));
+      database.emit('addXp', interaction.user.id, xp);
       await db.add(`${interaction.user.id}.balance.coins`, coins);
       return await interaction.editReply({ embeds: [embed2] });
       }
