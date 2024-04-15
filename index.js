@@ -93,15 +93,9 @@ for (const file of commandFilesTwo) {
 	client.commands.set(command.data.name, command);
 }
 
-process.on('unhandledRejection', error => {
-console.error('Unhandled promise rejection: ', error);
-});
-process.on('uncaughtException', (err) => {
-  console.log('Uncaught Exception: ', err);
-})
-process.on('uncaughtExceptionMonitor', (err, origin) => {
-  console.log('Uncaught Exception Monitor: ', err, origin);
-})
+process.on('unhandledRejection', error => {});
+process.on('uncaughtException', (err) => {})
+process.on('uncaughtExceptionMonitor', (err, origin) => {})
 
 db.on("ready", () => {
     console.log("Connected to the database");
