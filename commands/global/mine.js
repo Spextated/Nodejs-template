@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 const { Database } = require('quickmongo')
 const db = new Database(process.env.mongoKey)
+const database = require('/opt/render/project/src/index.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -27,8 +28,8 @@ module.exports = {
       diamonds = diamonds * 3;
     }
     
-await db.add(`${interaction.user.id}.balance.diamonds`, diamonds)
-       await db.close();
+  database.emit('addDiamonds', interaction.user.id, diamonds);
+
        let embed = new EmbedBuilder()
        .setTitle(`⛏️ You mined and received **${diamonds}** 💎`)
        .setColor('White');
