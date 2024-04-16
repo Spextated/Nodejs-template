@@ -11,7 +11,7 @@ module.exports = {
     await db.connect();
   let weekly = await db.get(`${interaction.user.id}.weekly`);
   let balance = await db.get(`${interaction.user.id}.balance`);
-   let coins = Math.floor(Math.random() * 7500) + 50000;
+   let coins = Math.floor(Math.random() * 5000) + 20000;
     
   let rewardEmbed = new EmbedBuilder()
       .setTitle(`🎁 You have claimed your weekly reward of **${coins.toLocaleString()}** coins`)
