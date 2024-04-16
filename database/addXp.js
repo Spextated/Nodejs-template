@@ -14,7 +14,7 @@ let maxXp = 50 * (1.5 * userData.rank.level);
 
 if (userData.rank.xp + xp >= maxXp) {
     let leftOverXp = (userData.rank.xp + xp) - maxXp;
-    database.emit('levelUp', (player, leftOverXp));
+    database.emit('levelUp', player, leftOverXp);
 } else {
     await db.add(`${player}.rank.xp`, xp);
 }
