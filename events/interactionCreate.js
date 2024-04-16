@@ -83,8 +83,6 @@ if (command.level) {
   return await interaction.editReply({ embeds: [embed] })
  }
 }
-    let dataInfo = await dbTwo.all();
-    console.log(dataInfo);
     
 if (interaction.commandName != "server-info" || interaction.commandName != "user-info" || interaction.commandName != "wipe" || interaction.commandName != "data-edit" || interaction.commandName != "data-info") {
 if (!userData) {
