@@ -52,11 +52,7 @@ if (health / userDamage > (userData.health / damage)) {
         .setTitle(`😰 You ran away and dropped **${coins}** coins along the way because you weren't able to defeat the **Level ${userData.rank.level} ${creature}**`)
           .setFooter({ text: 'Tip: Upgrade your damage & defense at the upgrade shop'})
         .setColor('#000000');
-if (userData.balance.coins - coins <= 0) {
-   await db.set(`${interaction.user.id}.balance.coins`, 0);
-  } else {
-    await db.subtract(`${interaction.user.id}.balance.coins`, coins);
-  }
+        database.emit('subCoins', interaction.user.id, coins);
         return await interaction.editReply({ embeds: [embed1] });
       }
 
@@ -69,7 +65,7 @@ if (userData.balance.coins - coins <= 0) {
       .setColor('White');
       
       database.emit('addXp', interaction.user.id, xp);
-      await db.add(`${interaction.user.id}.balance.coins`, coins);
+      database.emit('addCoins', interaction.user.id, coins);
       return await interaction.editReply({ embeds: [embed2] });
       }
 
