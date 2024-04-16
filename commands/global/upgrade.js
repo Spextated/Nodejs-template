@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js')
 const { Database } = require('quickmongo')
 const db = new Database(process.env.mongoKey)
+const database = require('/opt/render/project/src/index.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -78,7 +79,7 @@ if (upgrades[id - 1].category === 'defense' && userData.defense + amount > (user
       
 if (upgrades[id - 1].currency === '🪙') {
   if (userData.balance.coins >= (upgrades[id - 1].price * amount) && upgrades[id - 1].category === 'damage') {
-  await db.subtract(`${interaction.user.id}.balance.coins`, (upgrades[id - 1].price * amount));
+  database.emit('subCoins', interaction.user.id, (upgrades[id - 1].price * amount));
     
 await db.add(`${interaction.user.id}.items[${index}].damage`, amount);
 
@@ -97,7 +98,7 @@ await db.add(`${interaction.user.id}.items[${index}].damage`, amount);
       
 if (upgrades[id - 1].currency === '💎') {
   if (userData.balance.diamonds >= (upgrades[id - 1].price * amount) && upgrades[id - 1].category === 'defense') {
-  await db.subtract(`${interaction.user.id}.balance.diamonds`, (upgrades[id - 1].price * amount));
+  database.emit('subDiamonds', interaction.user.id, (upgrades[id - 1].price * amount));
     
   await db.add(`${interaction.user.id}.defense`, amount);
   let embed = new EmbedBuilder()
