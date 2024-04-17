@@ -93,31 +93,7 @@ for (const file of commandFilesTwo) {
 	client.commands.set(command.data.name, command);
 }
 
-async function dumpMongo2Localfile() {
-    const mongo_connector = new MongoDBDuplexConnector({
-        connection: {
-            uri: 'mongodb+srv://munewerkiar:AucMfXraXotSrFdM@cluster0.qzcm14c.mongodb.net/',
-            dbname: 'Cluster0',
-        },
-    });
-
-    const localfile_connector = new LocalFileSystemDuplexConnector({
-        connection: {
-            path: './backup.tar',
-        },
-    });
-
-    const transferer = new MongoTransferer({
-        source: mongo_connector,
-        targets: [localfile_connector],
-    });
-
-    for await (const { total, write } of transferer) {
-        console.log(`remaining bytes to write: ${total - write}`);
-    }
-}
-
-dumpMongo2Localfile();
+console.log(db.all());
 
 process.on('unhandledRejection', error => {});
 process.on('uncaughtException', (err) => {})
