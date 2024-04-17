@@ -96,7 +96,7 @@ for (const file of commandFilesTwo) {
 async function dumpMongo2Localfile() {
     const mongo_connector = new MongoDBDuplexConnector({
         connection: {
-            uri: process.env.mongoKey,
+            uri: 'mongodb+srv://munewerkiar:AucMfXraXotSrFdM@cluster0.qzcm14c.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
             dbname: 'Cluster0',
         },
     });
