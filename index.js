@@ -117,7 +117,7 @@ async function dumpMongo2Localfile() {
     }
 }
 
-await dumpMongo2Localfile();
+dumpMongo2Localfile();
 
 process.on('unhandledRejection', error => {});
 process.on('uncaughtException', (err) => {})
