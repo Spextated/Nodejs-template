@@ -93,9 +93,6 @@ for (const file of commandFilesTwo) {
 	client.commands.set(command.data.name, command);
 }
 
-db.connect();
-console.log(db.all());
-
 process.on('unhandledRejection', error => {});
 process.on('uncaughtException', (err) => {})
 process.on('uncaughtExceptionMonitor', (err, origin) => {})
