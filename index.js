@@ -93,6 +93,7 @@ for (const file of commandFilesTwo) {
 	client.commands.set(command.data.name, command);
 }
 
+await db.connect();
 console.log(db.all());
 
 process.on('unhandledRejection', error => {});
