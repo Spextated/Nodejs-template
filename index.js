@@ -14,7 +14,7 @@ app.listen(port, () =>
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-
+const { MongoTransferer, MongoDBDuplexConnector, LocalFileSystemDuplexConnector } = require('mongodb-snapshot');
 const EventEmitter = require('events');
 const database = new EventEmitter();
 module.exports = database;
@@ -91,6 +91,30 @@ for (const file of commandFilesTwo) {
 	const command = require(`./commands/testing/${file}`);
 	commandsTwo.push(command.data.toJSON());
 	client.commands.set(command.data.name, command);
+}
+
+async function dumpMongo2Localfile() {
+    const mongo_connector = new MongoDBDuplexConnector({
+        connection: {
+            uri: process.env.mongoKey,
+            dbname: 'Cluster0',
+        },
+    });
+
+    const localfile_connector = new LocalFileSystemDuplexConnector({
+        connection: {
+            path: './backup.tar',
+        },
+    });
+
+    const transferer = new MongoTransferer({
+        source: mongo_connector,
+        targets: [localfile_connector],
+    });
+
+    for await (const { total, write } of transferer) {
+        console.log(`remaining bytes to write: ${total - write}`);
+    }
 }
 
 process.on('unhandledRejection', error => {});
