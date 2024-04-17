@@ -94,7 +94,7 @@ database.emit('newPlayer', interaction);
     
 	try {
 		await command.execute(interaction);
-    console.log(dbTwo.all());
+    console.log(await dbTwo.all());
 	} catch (error) {
 let embed = new EmbedBuilder()
     .setTitle(`:x: There was an error with the ${interaction.commandName} command`)   .setDescription(`\`${error.stack}\``)
