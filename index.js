@@ -97,9 +97,6 @@ process.on('unhandledRejection', error => {});
 process.on('uncaughtException', (err) => {})
 process.on('uncaughtExceptionMonitor', (err, origin) => {})
 
-db.on("ready", () => {
-    console.log("Connected to the database");
-});
 
 client.login(process.env.TOKEN);
 
