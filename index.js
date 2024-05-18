@@ -14,7 +14,7 @@ app.listen(port, () =>
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { MongoTransferer, MongoDBDuplexConnector, LocalFileSystemDuplexConnector } = require('mongodb-snapshot');
+
 const EventEmitter = require('events');
 const database = new EventEmitter();
 module.exports = database;
